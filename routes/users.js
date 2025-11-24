@@ -14,8 +14,9 @@ router.post(apiPrefix, async (req, res) => {
 });
 
 // Route for fetching all users
-router.get(apiPrefix, (req, res) => {
-	res.status(200).json({ param: req.query.test });
+router.get(apiPrefix, async (req, res) => {
+	const result = await service.findAll();
+	res.status(200).json(result);
 });
 
 // Route for fetching user by id

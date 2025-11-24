@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const rounds = 10;
 
+const repo = require("./../database/userRepository");
+
 class UserService {
 	constructor() {
 		console.log("Constructor");
@@ -9,8 +11,14 @@ class UserService {
 	async add(newUser) {
 		console.log("Adding user: " + newUser.firstName);
 
+		repo.insert(newUser);
+
 		const hashed = await bcrypt.hash(newUser.password, rounds);
 		return hashed;
+	}
+
+	async findAll() {
+		return await repo.selectAll();
 	}
 
 	#validateEmail(email) {
@@ -25,5 +33,4 @@ class UserService {
 }
 
 const service = new UserService();
-
 module.exports = service;
