@@ -67,7 +67,7 @@ class userRepository {
 }
 
 function toSqlInsert(id, user) {
-	return `INSERT INTO ${tableName} (id, first_name, last_name, username, email, password, role) 
+	return `INSERT INTO ${tableName} (id, "firstName", "lastName", username, email, password, role) 
     VALUES (${id}, '${user.firstName}', '${user.lastName}', '${user.username}', '${user.email}', '${user.password}', '${user.role}');`;
 }
 
