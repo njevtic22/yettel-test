@@ -31,6 +31,10 @@ const server = app.listen(3000);
 const userRouter = require("./routes/users");
 app.use(userRouter);
 
+// Registering all routes related to task
+const taskRouter = require("./routes/tasks");
+app.use(taskRouter);
+
 // Cleanup on shutdown
 function shutdown() {
 	console.log("Shutting down...");

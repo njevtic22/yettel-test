@@ -6,10 +6,6 @@ const ApiError = require("./../exceptions/ApiError");
 const repo = require("./../database/userRepository");
 
 class UserService {
-	constructor() {
-		console.log("Constructor");
-	}
-
 	async add(newUser) {
 		await this.#validateEmail(newUser.email);
 		await this.#validateUsername(newUser.username);

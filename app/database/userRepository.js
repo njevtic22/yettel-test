@@ -4,10 +4,6 @@ const { pool } = require("./config");
 const tableName = "users";
 
 class userRepository {
-	constructor() {
-		console.log("Constructor");
-	}
-
 	async insert(newUser) {
 		let res = null;
 		let conn = null;
