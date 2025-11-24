@@ -30,15 +30,24 @@ class UserService {
 		return await repo.selectAll(pageable);
 	}
 
+	async findById(id) {
+		const found = await repo.selectById(id);
+		if (!found) {
+			throw new ApiError(`User with id: '${id}' not found`, 404);
+		}
+
+		return found;
+	}
+
 	async #validateEmail(email) {
 		if (await repo.existsByEmail(email)) {
-			throw new ApiError(`Email: "${email}" is taken`, 400);
+			throw new ApiError(`Email: '${email}' is taken`, 400);
 		}
 	}
 
 	async #validateUsername(username) {
 		if (await repo.existsByUsername(username)) {
-			throw new ApiError(`Username: "${username}" is taken`, 400);
+			throw new ApiError(`Username: '${username}' is taken`, 400);
 		}
 	}
 }

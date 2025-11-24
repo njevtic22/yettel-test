@@ -29,8 +29,10 @@ router.get(apiPrefix, async (req, res) => {
 });
 
 // Route for fetching user by id
-router.get(`${apiPrefix}/:id`, (req, res) => {
-	res.status(200).json({ param: "fetched" });
+router.get(`${apiPrefix}/:id`, async (req, res) => {
+	const result = await service.findById(req.params.id);
+	const dtoResult = toDto(result);
+	res.status(200).json(dtoResult);
 });
 
 // Route for updating existing user
