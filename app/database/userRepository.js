@@ -35,7 +35,11 @@ class userRepository {
 			conn = await pool.connect();
 
 			res = await conn.query(
-				`SELECT * FROM ${tableName} ORDER BY "${pageable.sort}" ${pageable.order} OFFSET ${pageable.page} ROWS LIMIT ${pageable.size}`
+				`SELECT * FROM ${tableName} ORDER BY "${pageable.sort}" ${
+					pageable.order
+				} OFFSET ${pageable.page * pageable.size} ROWS LIMIT ${
+					pageable.size
+				}`
 			);
 
 			count = await this.count(`SELECT count(*) FROM ${tableName}`);
