@@ -9,12 +9,19 @@ class UserService {
 	}
 
 	async add(newUser) {
-		console.log("Adding user: " + newUser.firstName);
-
-		repo.insert(newUser);
+		this.#validateEmail(newUser.email);
+		this.#validateUsername(newUser.username);
 
 		const hashed = await bcrypt.hash(newUser.password, rounds);
-		return hashed;
+
+		const toAdd = {
+			...newUser,
+			password: hashed,
+			role: "BASIC",
+		};
+		const added = await repo.insert(toAdd);
+
+		return added;
 	}
 
 	async findAll() {
@@ -22,12 +29,12 @@ class UserService {
 	}
 
 	#validateEmail(email) {
-		// repo.existsByEmail(email)
+		// TODO: repo.existsByEmail(email)
 		console.log("Validating email");
 	}
 
 	#validateUsername(username) {
-		// repo.existsByUsername(username)
+		// TODO: repo.existsByUsername(username)
 		console.log("Validating username");
 	}
 }
