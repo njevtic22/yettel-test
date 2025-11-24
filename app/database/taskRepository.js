@@ -101,7 +101,24 @@ class TaskRepository {
 			);
 		} catch (err) {
 			console.error(
-				"Error quering database with selectById operation",
+				"Error quering database with updateById operation",
+				err
+			);
+		} finally {
+			conn?.release();
+		}
+	}
+
+	async deleteById(id) {
+		let conn = null;
+
+		try {
+			conn = await pool.connect();
+
+			await conn.query(`DELETE FROM ${tableName} WHERE id = ${id}`);
+		} catch (err) {
+			console.error(
+				"Error quering database with deleteById operation",
 				err
 			);
 		} finally {

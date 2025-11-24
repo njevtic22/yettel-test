@@ -6,7 +6,6 @@ const apiPrefix = "/api/tasks";
 const service = require("./../services/taskService");
 
 const { getPageable } = require("./../util/queryParamUtil");
-const { toDtoPage } = require("./../util/dtoMapper");
 const { validateTask } = require("../util/nullValidator");
 
 // Route for adding new task
@@ -24,7 +23,6 @@ router.get(apiPrefix, async (req, res) => {
 	const pageable = getPageable(req);
 
 	const result = await service.findAll(pageable, req.query.userId);
-	// const dtoResult = toDtoPage(result, toDto);
 	res.status(200).json(result);
 });
 
@@ -43,9 +41,9 @@ router.put(`${apiPrefix}/:id`, async (req, res) => {
 	res.sendStatus(200);
 });
 
-// function toDto(user) {
-// 	const { body, ...dto } = user;
-// 	return dto;
-// }
+router.delete(`${apiPrefix}/:id`, async (req, res) => {
+	await service.deleteById(req.params.id);
+	res.sendStatus(204);
+});
 
 module.exports = router;

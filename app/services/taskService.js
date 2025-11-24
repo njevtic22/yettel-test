@@ -39,6 +39,12 @@ class TaskService {
 		await repo.updateById(id, changes);
 	}
 
+	async deleteById(id) {
+		const existing = await this.findById(id);
+
+		await repo.deleteById(id);
+	}
+
 	#validateBody(body) {
 		if (body.length > 1000) {
 			throw new ApiError(
