@@ -11,7 +11,7 @@ class userRepository {
 		let res = null;
 		let conn = null;
 
-		const count = await this.count();
+		const count = await this.count(`SELECT count(*) FROM ${tableName}`);
 		try {
 			conn = await pool.connect();
 
@@ -19,8 +19,7 @@ class userRepository {
 
 			res = await conn.query(insertQuery);
 		} catch (err) {
-			console.log("Error quering database with insert operation");
-			console.log(err);
+			console.error("Error quering database with insert operation", err);
 		} finally {
 			conn.release();
 		}
@@ -28,36 +27,46 @@ class userRepository {
 		return res;
 	}
 
-	async selectAll() {
+	async selectAll(pageable) {
 		let res = null;
+		let count = null;
 		let conn = null;
 		try {
 			conn = await pool.connect();
 
-			res = await conn.query(`SELECT * FROM ${tableName}`);
+			res = await conn.query(
+				`SELECT * FROM ${tableName} ORDER BY "${pageable.sort}" ${pageable.order} OFFSET ${pageable.page} ROWS LIMIT ${pageable.size}`
+			);
+
+			count = await this.count(`SELECT count(*) FROM ${tableName}`);
 		} catch (err) {
-			console.log("Error quering database with select all operation");
-			console.log(err);
+			console.error(
+				"Error quering database with select all operation",
+				err
+			);
 		} finally {
 			conn.release();
 		}
-		return res.rows;
+
+		const page = {
+			totalPages: Math.ceil(count / pageable.size),
+			totalElements: count,
+			data: res.rows,
+		};
+		return page;
 	}
 
-	async count() {
+	async count(query) {
 		let count = null;
 		let conn = null;
 
 		try {
 			conn = await pool.connect();
 
-			const queryResult = await conn.query(
-				`SELECT count(*) FROM ${tableName}`
-			);
+			const queryResult = await conn.query(query);
 			count = Number(queryResult.rows[0].count);
 		} catch (err) {
-			console.log("Error quering database with count operation");
-			console.log(err);
+			console.error("Error quering database with count operation", err);
 		} finally {
 			conn.release();
 		}

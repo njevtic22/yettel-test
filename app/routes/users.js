@@ -6,6 +6,8 @@ const apiPrefix = "/api/users";
 const service = require("./../services/userService");
 
 const { validateUser } = require("./../util/nullValidator");
+const { getPageable } = require("./../util/queryParamUtil");
+const { toDtoPage } = require("./../util/dtoMapper");
 
 // Route for adding new user
 router.post(apiPrefix, async (req, res) => {
@@ -19,8 +21,10 @@ router.post(apiPrefix, async (req, res) => {
 
 // Route for fetching all users
 router.get(apiPrefix, async (req, res) => {
-	const result = await service.findAll();
-	const dtoResult = toDtoArray(result);
+	const pageable = getPageable(req);
+
+	const result = await service.findAll(pageable);
+	const dtoResult = toDtoPage(result, toDto);
 	res.status(200).json(dtoResult);
 });
 
@@ -38,16 +42,6 @@ router.put(`${apiPrefix}/:id`, (req, res) => {
 function toDto(user) {
 	const { password, ...dto } = user;
 	return dto;
-}
-
-// Creates array of dto objects
-function toDtoArray(users) {
-	let dtos = [];
-	for (let i = 0; i < users.length; i++) {
-		const user = users[i];
-		dtos.push(toDto(user));
-	}
-	return dtos;
 }
 
 module.exports = router;

@@ -24,8 +24,8 @@ class UserService {
 		return added;
 	}
 
-	async findAll() {
-		return await repo.selectAll();
+	async findAll(pageable) {
+		return await repo.selectAll(pageable);
 	}
 
 	#validateEmail(email) {
