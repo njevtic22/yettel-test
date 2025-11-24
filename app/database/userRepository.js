@@ -100,6 +100,29 @@ class userRepository {
 
 		return result;
 	}
+
+	async existsByUsername(username) {
+		let result = null;
+		let conn = null;
+
+		try {
+			conn = await pool.connect();
+
+			const queryResult = await conn.query(
+				`SELECT EXISTS(SELECT * FROM ${tableName} WHERE username = '${username}')`
+			);
+			result = Boolean(queryResult.rows[0].exists);
+		} catch (err) {
+			console.error(
+				"Error quering database with existsByUsername operation",
+				err
+			);
+		} finally {
+			conn?.release();
+		}
+
+		return result;
+	}
 }
 
 function toSqlInsert(id, user) {

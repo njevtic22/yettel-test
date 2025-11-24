@@ -12,7 +12,7 @@ class UserService {
 
 	async add(newUser) {
 		await this.#validateEmail(newUser.email);
-		this.#validateUsername(newUser.username);
+		await this.#validateUsername(newUser.username);
 
 		const hashed = await bcrypt.hash(newUser.password, rounds);
 
@@ -31,15 +31,15 @@ class UserService {
 	}
 
 	async #validateEmail(email) {
-		// TODO: repo.existsByEmail(email)
 		if (await repo.existsByEmail(email)) {
-			throw new ApiError(`Email: ${email} is taken`, 400);
+			throw new ApiError(`Email: "${email}" is taken`, 400);
 		}
 	}
 
-	#validateUsername(username) {
-		// TODO: repo.existsByUsername(username)
-		console.log("Validating username");
+	async #validateUsername(username) {
+		if (await repo.existsByUsername(username)) {
+			throw new ApiError(`Username: "${username}" is taken`, 400);
+		}
 	}
 }
 
