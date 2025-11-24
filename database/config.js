@@ -8,4 +8,13 @@ const pool = new Pool({
 	database: "task-db",
 });
 
-module.exports = pool;
+async function closePool() {
+	try {
+		await pool.end();
+		console.log("Database pool closed");
+	} catch (err) {
+		console.error("Error closing pool", err);
+	}
+}
+
+module.exports = { pool, closePool };

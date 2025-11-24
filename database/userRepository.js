@@ -1,4 +1,4 @@
-const pool = require("./config");
+const { pool } = require("./config");
 
 const tableName = "users";
 
