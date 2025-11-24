@@ -62,6 +62,34 @@ class TaskRepository {
 		return page;
 	}
 
+	async selectById(id) {
+		let res = null;
+		let conn = null;
+
+		try {
+			conn = await pool.connect();
+
+			const queryResult = await conn.query(
+				`SELECT * FROM ${tableName} WHERE id = ${id}`
+			);
+			if (queryResult.rows.length > 1) {
+				throw new ApiError(
+					`Multiple tasks found with same id = '${id}'`
+				);
+			}
+			res = queryResult.rows[0];
+		} catch (err) {
+			console.error(
+				"Error quering database with selectById operation",
+				err
+			);
+		} finally {
+			conn?.release();
+		}
+
+		return res;
+	}
+
 	async count(query) {
 		let count = null;
 		let conn = null;

@@ -28,6 +28,12 @@ router.get(apiPrefix, async (req, res) => {
 	res.status(200).json(result);
 });
 
+// Route for fetching task by id
+router.get(`${apiPrefix}/:id`, async (req, res) => {
+	const result = await service.findById(req.params.id);
+	res.status(200).json(result);
+});
+
 // function toDto(user) {
 // 	const { body, ...dto } = user;
 // 	return dto;

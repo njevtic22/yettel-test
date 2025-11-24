@@ -23,6 +23,15 @@ class TaskService {
 		return await repo.selectAll(pageable, userId);
 	}
 
+	async findById(id) {
+		const found = await repo.selectById(id);
+		if (!found) {
+			throw new ApiError(`Task with id: '${id}' not found`, 404);
+		}
+
+		return found;
+	}
+
 	#validateBody(body) {
 		if (body.length > 1000) {
 			throw new ApiError(
