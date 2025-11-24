@@ -3,9 +3,13 @@ const router = express.Router();
 
 const apiPrefix = "/users";
 
+const service = require("./../services/userService");
+
 // Route for adding new user
-router.post(apiPrefix, (req, res) => {
+router.post(apiPrefix, async (req, res) => {
+	const password = await service.add(req.body);
 	res.setHeader("location", "added");
+	res.setHeader("password", password);
 	res.sendStatus(201);
 });
 
