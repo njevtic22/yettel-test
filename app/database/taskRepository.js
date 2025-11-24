@@ -4,23 +4,27 @@ const { pool } = require("./config");
 const tableName = "tasks";
 
 class TaskRepository {
-	async selectAll(pageable) {
+	async selectAll(pageable, userId) {
 		let res = null;
 		let count = null;
 		let conn = null;
 
+		const where = userId ? `WHERE "userId" = ${userId}` : "";
+
 		try {
 			conn = await pool.connect();
 
-			res = await conn.query(
-				`SELECT * FROM ${tableName} ORDER BY "${pageable.sort}" ${
-					pageable.order
-				} OFFSET ${pageable.page * pageable.size} ROWS LIMIT ${
-					pageable.size
-				}`
-			);
+			const select = `SELECT * FROM ${tableName} ${where} ORDER BY "${
+				pageable.sort
+			}" ${pageable.order} OFFSET ${
+				pageable.page * pageable.size
+			} ROWS LIMIT ${pageable.size}`;
 
-			count = await this.count(`SELECT count(*) FROM ${tableName}`);
+			res = await conn.query(select);
+
+			count = await this.count(
+				`SELECT count(*) FROM ${tableName} ${where}`
+			);
 		} catch (err) {
 			console.error(
 				"Error quering database with select all operation",

@@ -12,7 +12,7 @@ const { toDtoPage } = require("./../util/dtoMapper");
 router.get(apiPrefix, async (req, res) => {
 	const pageable = getPageable(req);
 
-	const result = await service.findAll(pageable);
+	const result = await service.findAll(pageable, req.query.userId);
 	res.status(200).json(result);
 });
 
