@@ -9,7 +9,9 @@ function validateNull(obj, keys) {
 		}
 	}
 
-	throw new ApiFieldError("Invalid field(s)", details, 400);
+	if (details.length > 0) {
+		throw new ApiFieldError("Invalid field(s)", details, 400);
+	}
 }
 
 function validateAddUser(
@@ -26,4 +28,8 @@ function validateUpdateUser(
 	validateNull(obj, keys);
 }
 
-module.exports = { validateAddUser, validateUpdateUser };
+function validateAddTask(obj, keys = ["userId", "body"]) {
+	validateNull(obj, keys);
+}
+
+module.exports = { validateAddUser, validateUpdateUser, validateAddTask };

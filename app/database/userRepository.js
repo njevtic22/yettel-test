@@ -21,7 +21,7 @@ class userRepository {
 			conn?.release();
 		}
 
-		return res;
+		return { id: count + 1, ...newUser };
 	}
 
 	async selectAll(pageable) {

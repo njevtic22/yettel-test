@@ -4,6 +4,26 @@ const { pool } = require("./config");
 const tableName = "tasks";
 
 class TaskRepository {
+	async insert(newTask) {
+		let res = null;
+		let conn = null;
+
+		const count = await this.count(`SELECT count(*) FROM ${tableName}`);
+		try {
+			conn = await pool.connect();
+
+			const insert = toSqlInsert(count + 1, newTask);
+
+			res = await conn.query(insert);
+		} catch (err) {
+			console.error("Error quering database with insert operation", err);
+		} finally {
+			conn?.release();
+		}
+
+		return { id: count + 1, ...newTask };
+	}
+
 	async selectAll(pageable, userId) {
 		let res = null;
 		let count = null;
@@ -59,6 +79,11 @@ class TaskRepository {
 
 		return count;
 	}
+}
+
+function toSqlInsert(id, task) {
+	return `INSERT INTO ${tableName} (id, created, "userId", body) 
+    VALUES (${id}, '${task.created}', ${task.userId}, '${task.body}');`;
 }
 
 const repo = new TaskRepository();
