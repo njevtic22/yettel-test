@@ -1,0 +1,25 @@
+{
+	"name": "yettel-test",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/njevtic22/yettel-test.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"bugs": {
+		"url": "https://github.com/njevtic22/yettel-test/issues"
+	},
+	"homepage": "https://github.com/njevtic22/yettel-test#readme",
+	"dependencies": {
+		"express": "^5.1.0"
+	}
+}
