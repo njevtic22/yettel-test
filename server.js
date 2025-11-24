@@ -51,3 +51,17 @@ function shutdown() {
 
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
+
+// Error handling
+app.use((err, req, res, next) => {
+	if (err.isCustom) {
+		res.status(err.statusCode).json({
+			message: err.message,
+		});
+	} else {
+		console.error(err);
+		res.status(500).json({
+			message: err.message,
+		});
+	}
+});
