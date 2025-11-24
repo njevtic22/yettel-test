@@ -90,6 +90,25 @@ class TaskRepository {
 		return res;
 	}
 
+	async updateById(id, changes) {
+		let conn = null;
+
+		try {
+			conn = await pool.connect();
+
+			await conn.query(
+				`UPDATE ${tableName} SET body = '${changes.body}' WHERE id = ${id}`
+			);
+		} catch (err) {
+			console.error(
+				"Error quering database with selectById operation",
+				err
+			);
+		} finally {
+			conn?.release();
+		}
+	}
+
 	async count(query) {
 		let count = null;
 		let conn = null;

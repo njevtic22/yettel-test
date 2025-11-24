@@ -32,6 +32,13 @@ class TaskService {
 		return found;
 	}
 
+	async updateById(id, changes) {
+		const existing = await this.findById(id);
+		this.#validateBody(changes.body);
+
+		await repo.updateById(id, changes);
+	}
+
 	#validateBody(body) {
 		if (body.length > 1000) {
 			throw new ApiError(

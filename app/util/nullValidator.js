@@ -28,8 +28,8 @@ function validateUpdateUser(
 	validateNull(obj, keys);
 }
 
-function validateAddTask(obj, keys = ["userId", "body"]) {
+function validateTask(obj, keys = ["userId", "body"]) {
 	validateNull(obj, keys);
 }
 
-module.exports = { validateAddUser, validateUpdateUser, validateAddTask };
+module.exports = { validateAddUser, validateUpdateUser, validateTask };
