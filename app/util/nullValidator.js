@@ -1,12 +1,15 @@
-const ApiError = require("./../exceptions/ApiError");
+const ApiFieldError = require("../exceptions/ApiFieldError");
 
 function validateNull(obj, keys) {
+	let details = [];
 	for (const key of keys) {
 		const value = obj[key];
-		if (value == null) {
-			throw new ApiError(key + " must not be null", 400);
+		if (value == null || value == undefined) {
+			details.push(key + " must not be null");
 		}
 	}
+
+	throw new ApiFieldError("Invalid field(s)", details, 400);
 }
 
 function validateAddUser(

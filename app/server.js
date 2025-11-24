@@ -55,9 +55,15 @@ process.on("SIGTERM", shutdown);
 // Error handling
 app.use((err, req, res, next) => {
 	if (err.isCustom) {
-		res.status(err.statusCode).json({
+		let errorBody = {
 			message: err.message,
-		});
+		};
+
+		if (err.details) {
+			errorBody.details = err.details;
+		}
+
+		res.status(err.statusCode).json(errorBody);
 	} else {
 		console.error(err);
 		res.status(500).json({
