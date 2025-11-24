@@ -5,13 +5,16 @@ const apiPrefix = "/api/users";
 
 const service = require("./../services/userService");
 
-const { validateUser } = require("./../util/nullValidator");
+const {
+	validateAddUser,
+	validateUpdateUser,
+} = require("./../util/nullValidator");
 const { getPageable } = require("./../util/queryParamUtil");
 const { toDtoPage } = require("./../util/dtoMapper");
 
 // Route for adding new user
 router.post(apiPrefix, async (req, res) => {
-	validateUser(req.body);
+	validateAddUser(req.body);
 
 	const added = await service.add(req.body);
 
@@ -36,8 +39,12 @@ router.get(`${apiPrefix}/:id`, async (req, res) => {
 });
 
 // Route for updating existing user
-router.put(`${apiPrefix}/:id`, (req, res) => {
-	res.status(200).json({ param: "updated" });
+router.put(`${apiPrefix}/:id`, async (req, res) => {
+	validateUpdateUser(req.body);
+
+	await service.updateById(req.params.id, req.body);
+
+	res.sendStatus(200);
 });
 
 // Creates dto object which omits data that client should not see

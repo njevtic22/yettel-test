@@ -39,6 +39,18 @@ class UserService {
 		return found;
 	}
 
+	async updateById(id, changes) {
+		const existing = await this.findById(id);
+		if (existing.email != changes.email) {
+			await this.#validateEmail(changes.email);
+		}
+		if (existing.username != changes.username) {
+			await this.#validateUsername(changes.username);
+		}
+
+		await repo.updateById(id, changes);
+	}
+
 	async #validateEmail(email) {
 		if (await repo.existsByEmail(email)) {
 			throw new ApiError(`Email: '${email}' is taken`, 400);

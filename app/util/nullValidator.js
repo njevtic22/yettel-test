@@ -9,11 +9,18 @@ function validateNull(obj, keys) {
 	}
 }
 
-function validateUser(
+function validateAddUser(
 	obj,
 	keys = ["firstName", "lastName", "email", "username", "password"]
 ) {
 	validateNull(obj, keys);
 }
 
-module.exports = { validateUser };
+function validateUpdateUser(
+	obj,
+	keys = ["firstName", "lastName", "email", "username"]
+) {
+	validateNull(obj, keys);
+}
+
+module.exports = { validateAddUser, validateUpdateUser };

@@ -89,6 +89,25 @@ class userRepository {
 		return res;
 	}
 
+	async updateById(id, changes) {
+		let conn = null;
+
+		try {
+			conn = await pool.connect();
+
+			await conn.query(
+				`UPDATE ${tableName} SET "firstName" = '${changes.firstName}', "lastName" = '${changes.lastName}', username = '${changes.username}', email = '${changes.email}' WHERE id = ${id}`
+			);
+		} catch (err) {
+			console.error(
+				"Error quering database with selectById operation",
+				err
+			);
+		} finally {
+			conn?.release();
+		}
+	}
+
 	async count(query) {
 		let count = null;
 		let conn = null;
