@@ -2,7 +2,7 @@ const http = require("http");
 const express = require("express");
 const app = express();
 
-// Logging all incoming requests and outgoing responses
+// Middleware for logging all incoming requests and outgoing responses
 function logger(req, res, next) {
 	console.log(
 		`Request:  ${req.method} ${req.originalUrl} HTTP/${req.httpVersion}`
@@ -23,5 +23,6 @@ app.use(logger);
 app.use(express.json());
 app.listen(3000);
 
+// Registering all routes related to user
 const userRouter = require("./routes/users");
 app.use(userRouter);
