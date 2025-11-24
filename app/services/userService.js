@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const rounds = 10;
 
+const ApiError = require("./../exceptions/ApiError");
+
 const repo = require("./../database/userRepository");
 
 class UserService {
@@ -9,7 +11,7 @@ class UserService {
 	}
 
 	async add(newUser) {
-		this.#validateEmail(newUser.email);
+		await this.#validateEmail(newUser.email);
 		this.#validateUsername(newUser.username);
 
 		const hashed = await bcrypt.hash(newUser.password, rounds);
@@ -28,9 +30,11 @@ class UserService {
 		return await repo.selectAll(pageable);
 	}
 
-	#validateEmail(email) {
+	async #validateEmail(email) {
 		// TODO: repo.existsByEmail(email)
-		console.log("Validating email");
+		if (await repo.existsByEmail(email)) {
+			throw new ApiError(`Email: ${email} is taken`, 400);
+		}
 	}
 
 	#validateUsername(username) {

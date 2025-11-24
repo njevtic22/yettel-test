@@ -21,7 +21,7 @@ class userRepository {
 		} catch (err) {
 			console.error("Error quering database with insert operation", err);
 		} finally {
-			conn.release();
+			conn?.release();
 		}
 
 		return res;
@@ -45,7 +45,7 @@ class userRepository {
 				err
 			);
 		} finally {
-			conn.release();
+			conn?.release();
 		}
 
 		const page = {
@@ -68,10 +68,33 @@ class userRepository {
 		} catch (err) {
 			console.error("Error quering database with count operation", err);
 		} finally {
-			conn.release();
+			conn?.release();
 		}
 
 		return count;
+	}
+
+	async existsByEmail(email) {
+		let result = null;
+		let conn = null;
+
+		try {
+			conn = await pool.connect();
+
+			const queryResult = await conn.query(
+				`SELECT EXISTS(SELECT * FROM ${tableName} WHERE email = '${email}')`
+			);
+			result = Boolean(queryResult.rows[0].exists);
+		} catch (err) {
+			console.error(
+				"Error quering database with existsByEmail operation",
+				err
+			);
+		} finally {
+			conn?.release();
+		}
+
+		return result;
 	}
 }
 
