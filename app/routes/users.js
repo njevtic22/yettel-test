@@ -20,7 +20,8 @@ router.post(apiPrefix, async (req, res) => {
 // Route for fetching all users
 router.get(apiPrefix, async (req, res) => {
 	const result = await service.findAll();
-	res.status(200).json(result);
+	const dtoResult = toDtoArray(result);
+	res.status(200).json(dtoResult);
 });
 
 // Route for fetching user by id
@@ -32,5 +33,21 @@ router.get(`${apiPrefix}/:id`, (req, res) => {
 router.put(`${apiPrefix}/:id`, (req, res) => {
 	res.status(200).json({ param: "updated" });
 });
+
+// Creates dto object which omits data that client should not see
+function toDto(user) {
+	const { password, ...dto } = user;
+	return dto;
+}
+
+// Creates array of dto objects
+function toDtoArray(users) {
+	let dtos = [];
+	for (let i = 0; i < users.length; i++) {
+		const user = users[i];
+		dtos.push(toDto(user));
+	}
+	return dtos;
+}
 
 module.exports = router;
