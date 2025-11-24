@@ -10,6 +10,11 @@ function getPageable(req) {
 
 	const sort = req.query.sort ? req.query.sort : "id,asc";
 	const sortSplit = sort.split(",");
+
+	if (sortSplit.length != 2) {
+		throw new ApiError(`Sort param must be in form of 'key,order'`, 400);
+	}
+
 	return {
 		page,
 		size,
